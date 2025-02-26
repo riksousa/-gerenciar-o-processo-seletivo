@@ -1,0 +1,58 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.IO;
+
+namespace ConsoleApp1
+{
+    public class FilaLinear
+    {
+        private Candidato[] fila;
+        private int inicio;
+        private int fim;
+        private int tamanho;
+
+        public FilaLinear(int capacidade)
+        {
+            fila = new Candidato[capacidade];
+            inicio = 0;
+            fim = -1;
+            tamanho = 0;
+        }
+
+        public bool EstaCheia() => tamanho == fila.Length;
+
+        public bool EstaVazia() => tamanho == 0;
+
+        public void Enfileirar(Candidato candidato)
+        {
+            if (EstaCheia()) return;
+
+            fim = (fim + 1) % fila.Length;
+            fila[fim] = candidato;
+            tamanho++;
+        }
+
+        public Candidato Desenfileirar()
+        {
+            if (EstaVazia()) return null;
+
+            var candidato = fila[inicio];
+            inicio = (inicio + 1) % fila.Length;
+            tamanho--;
+            return candidato;
+        }
+
+        public IEnumerable<Candidato> ObterTodos()
+        {
+            var resultado = new List<Candidato>();
+            for (int i = 0; i < tamanho; i++)
+            {
+                resultado.Add(fila[(inicio + i) % fila.Length]);
+            }
+            return resultado;
+        }
+    }
+}
